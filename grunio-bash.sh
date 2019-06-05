@@ -1,12 +1,11 @@
-#!/bin/bash
+
 #
-# grunio-bash
+# Grunio-bash
 # by Jakub Książek
 # special thanks to arhn.eu
 #
-# v0.1
+# v1.0
 #
-
 # TITLE SCREEN
 tput civis
 clear
@@ -46,17 +45,31 @@ SPEED=0.3;
 function draw_pig
 {
     local pig_position=${1};
+	local pig_direction=${2};
     
-    local pig_line1="  ,,__";
+    local pig_line1="  ,,__ ";
     local pig_line2=":''__ )";
-    local pig_line3="  *  *";
-    
-    tput cup $((HEIGHT-1)) $pig_position
-    echo -n "${pig_line1}"
-    tput cup $(($HEIGHT)) $pig_position
-    echo -n "${pig_line2}"
-    tput cup $((HEIGHT+1)) $pig_position
-    echo -n "${pig_line3}"
+    local pig_line3="  *  * ";
+	
+	local rev_pig_line1=" __,,  ";
+    local rev_pig_line2="( __'':";
+    local rev_pig_line3=" *  *  ";
+	
+	if [ "${pig_direction}" == "L" ]; then
+		tput cup $((HEIGHT-1)) $pig_position
+		echo -n "${pig_line1}"
+		tput cup $(($HEIGHT)) $pig_position
+		echo -n "${pig_line2}"
+		tput cup $((HEIGHT+1)) $pig_position
+		echo -n "${pig_line3}"
+	else
+		tput cup $((HEIGHT-1)) $pig_position
+		echo -n "${rev_pig_line1}"
+		tput cup $(($HEIGHT)) $pig_position
+		echo -n "${rev_pig_line2}"
+		tput cup $((HEIGHT+1)) $pig_position
+		echo -n "${rev_pig_line3}"
+	fi
 }
 
 function draw_carrot
@@ -75,14 +88,14 @@ function game_loop
 	carrot=(21 7);
 	score=(0 -1);
 
-    trap "move='R';" $SIG_RIGHT
-    trap "move='L';" $SIG_LEFT
+    trap "direction='R';" $SIG_RIGHT
+    trap "direction='L';" $SIG_LEFT
     trap "exit 1;" $SIG_QUIT
 	
 	while : 
 	do
 		# FETCH CONTROLS
-		case "$move" in
+		case "$direction" in
 			L)
 				[ $pig -gt 0 ] && ((pig=pig-2))
 				;;
@@ -112,7 +125,7 @@ function game_loop
 		# DISPLAY GRAPHIC
 		clear;
 		draw_carrot "${carrot[@]}"
-		draw_pig $pig
+		draw_pig $pig $direction
 
 		# DEBUG TOOLS
 		tput cup $((HEIGHT+2)) 0

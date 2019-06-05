@@ -44,4 +44,4 @@ SCORE: 4/7
 # Run
 Clone the repo. Make it executable and run "gruniobash.sh". 
 
-If you're a Windows user, you can still play the game. For example download some console client like [ConEmu](https://conemu.github.io/) and run command `bash grunio-bash.sh`.
+The game looks best on linux operating systems but if you're a Windows user, you can still play the game. For example download some console client like [Git BASH](https://gitforwindows.org/) and run command `bash grunio-bash.sh`.
